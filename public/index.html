@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover,user-scalable=no">
+<title>Проверь себя</title>
+<script src="https://telegram.org/js/telegram-web-app.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;800&family=Manrope:wght@500;700&display=swap" rel="stylesheet">
+<style>
+:root{--ink:#14121F;--paper:#F3F0FF;--blue:#3A2EFF;--lemon:#FFE14D;--pink:#FF6FB5;--mint:#5CF2B0;
+--sh:5px 5px 0 var(--ink)}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html,body{margin:0;min-height:100%}
+body{background:var(--blue);color:var(--ink);font:500 16px/1.4 Manrope,system-ui,sans-serif;
+padding:max(16px,env(safe-area-inset-top)) 16px max(24px,env(safe-area-inset-bottom));user-select:none}
+h1,h2,.big{font-family:Unbounded,Impact,sans-serif;margin:0}
+main{max-width:480px;margin:0 auto}
+.card{background:var(--paper);border:3px solid var(--ink);box-shadow:var(--sh);border-radius:24px;padding:18px}
+.passport{background:var(--lemon);border-radius:32px 32px 32px 8px;margin-bottom:22px}
+.passport h1{font-size:26px;line-height:1.1;font-weight:800}
+.passport p{margin:6px 0 16px;font-weight:700;opacity:.7}
+.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px}
+.stat{background:var(--paper);border:3px solid var(--ink);border-radius:16px;padding:10px 6px;text-align:center}
+.stat b{display:block;font:800 22px Unbounded,sans-serif}
+.stat span{font-size:12px;font-weight:700}
+.title{color:var(--paper);font-size:15px;font-weight:500;margin:0 0 12px 4px}
+.tests{display:grid;gap:14px}
+.test{all:unset;display:block;cursor:pointer;background:var(--c);border:3px solid var(--ink);box-shadow:var(--sh);
+border-radius:24px;padding:16px 18px;transition:transform .08s,box-shadow .08s}
+.test:active{transform:translate(4px,4px);box-shadow:1px 1px 0 var(--ink)}
+.test:focus-visible{outline:4px solid var(--paper);outline-offset:3px}
+.test h2{font-size:18px;font-weight:800}.test p{margin:4px 0 0;font-weight:700;font-size:14px}
+.test[disabled]{opacity:.55;cursor:default}
+.pad{all:unset;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:8px;text-align:center;
+width:100%;height:60vh;border:3px solid var(--ink);box-shadow:var(--sh);border-radius:32px;font:800 30px Unbounded,sans-serif;cursor:pointer;touch-action:manipulation}
+.pad small{font:700 14px Manrope,sans-serif}
+.wait{background:var(--pink)}.go{background:var(--mint)}.early{background:var(--lemon)}.tap{background:var(--paper)}
+.q{font:800 19px/1.3 Unbounded,sans-serif;margin:0 0 16px}
+.opt{all:unset;display:block;width:100%;cursor:pointer;background:var(--paper);border:3px solid var(--ink);border-radius:16px;
+padding:13px 16px;margin-top:10px;font-weight:700;box-shadow:3px 3px 0 var(--ink)}
+.opt:active{transform:translate(3px,3px);box-shadow:none}
+.bar{height:12px;border:3px solid var(--ink);border-radius:9px;background:var(--paper);overflow:hidden;margin-bottom:14px}
+.bar i{display:block;height:100%;background:var(--pink);transition:width .25s}
+.res{text-align:center;background:var(--mint)}
+.res .big{font-size:64px;font-weight:800;line-height:1}
+.res .unit{font-weight:700;margin:4px 0 12px}
+.btn{all:unset;display:block;cursor:pointer;text-align:center;margin-top:12px;padding:13px;border:3px solid var(--ink);
+border-radius:16px;background:var(--paper);font:800 15px Unbounded,sans-serif;box-shadow:3px 3px 0 var(--ink)}
+.btn.main{background:var(--lemon)}
+.note{color:var(--paper);font-size:12px;opacity:.8;margin:18px 4px 0}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+<main>
+  <section id="home">
+    <div class="card passport">
+      <h1 id="name">Гость</h1>
+      <p>Твой паспорт способностей</p>
+      <div class="stats">
+        <div class="stat"><b id="s-iq">—</b><span>IQ</span></div>
+        <div class="stat"><b id="s-reaction">—</b><span>реакция, мс</span></div>
+        <div class="stat"><b id="s-taps">—</b><span>тапов/сек</span></div>
+      </div>
+    </div>
+    <h2 class="title">Выбери проверку</h2>
+    <div class="tests">
+      <button class="test" style="--c:var(--pink)" data-t="reaction"><h2>Реакция</h2><p>Жми, как только станет зелёным. 3 раунда.</p></button>
+      <button class="test" style="--c:var(--mint)" data-t="iq"><h2>IQ-тест</h2><p>6 логических задач. Без таймера.</p></button>
+      <button class="test" style="--c:var(--paper)" data-t="taps"><h2>Скорость тапов</h2><p>10 секунд, сколько успеешь.</p></button>
+      <button class="test" style="--c:var(--paper)" disabled><h2>Память</h2><p>Скоро появится</p></button>
+    </div>
+    <p class="note">Оценки развлекательные и не заменяют настоящую диагностику.</p>
+  </section>
+  <section id="stage" hidden></section>
+</main>
+
+<script>
+const tg = window.Telegram?.WebApp;
+tg?.ready(); tg?.expand();
+const $ = s => document.querySelector(s);
+
+// initDataUnsafe — ТОЛЬКО для отображения. Доверять можно лишь тому, что проверил сервер по tg.initData.
+$('#name').textContent = tg?.initDataUnsafe?.user?.first_name || 'Гость';
+
+const RULES = { iq:'max', reaction:'min', taps:'max' };
+let best = {};
+try { best = JSON.parse(localStorage.getItem('best') || '{}'); } catch {}
+
+const api = (path, body) => fetch(path, {
+  method: body ? 'POST' : 'GET',
+  headers: { 'Content-Type':'application/json', 'X-Init-Data': tg?.initData || '' },
+  body: body ? JSON.stringify(body) : undefined
+}).then(r => r.ok ? r.json() : Promise.reject(r.status));
+
+function better(k, v){ return best[k] == null || (RULES[k]==='max' ? v > best[k] : v < best[k]); }
+function paint(){ for (const k in RULES) $('#s-'+k).textContent = best[k] ?? '—'; }
+function setBest(k, v){
+  if (!better(k, v)) return;
+  best[k] = v; paint();
+  try { localStorage.setItem('best', JSON.stringify(best)); } catch {}
+}
+paint();
+api('/api/me').then(d => { for (const k in d.best || {}) setBest(k, d.best[k]); }).catch(() => {});
+
+const stage = $('#stage'), home = $('#home');
+function go(view){
+  home.hidden = view !== 'home'; stage.hidden = view === 'home';
+  if (view === 'home') tg?.BackButton.hide(); else tg?.BackButton.show();
+  window.scrollTo(0, 0);
+}
+tg?.BackButton.onClick(() => go('home'));
+document.querySelectorAll('.test[data-t]').forEach(b => b.onclick = () => { go('stage'); TESTS[b.dataset.t](); });
+
+function finish({ key, value, unit, verdict }){
+  tg?.HapticFeedback?.notificationOccurred('success');
+  setBest(key, value);
+  api('/api/results', { test: key, value }).catch(() => {});
+  stage.innerHTML = `<div class="card res"><div class="big">${value}</div><div class="unit">${unit}</div>
+    <p>${verdict}</p></div>
+    <button class="btn main" id="again">Ещё раз</button><button class="btn" id="back">К проверкам</button>`;
+  $('#again').onclick = () => TESTS[key](); $('#back').onclick = () => go('home');
+}
+
+const TESTS = {
+  reaction(){
+    const times = []; let n = 0, t0, timer;
+    const round = () => {
+      stage.innerHTML = `<button class="pad wait" id="pad">Жди зелёного<small>Раунд ${n+1} из 3</small></button>`;
+      const pad = $('#pad'); let ready = false;
+      timer = setTimeout(() => { ready = true; pad.className = 'pad go'; pad.innerHTML = 'Жми!'; t0 = performance.now(); },
+        1000 + Math.random()*3000);
+      pad.onpointerdown = () => {
+        if (!ready){ clearTimeout(timer); pad.className = 'pad early'; pad.innerHTML = 'Рано!<small>Тапни, чтобы повторить раунд</small>'; pad.onpointerdown = round; return; }
+        times.push(performance.now() - t0);
+        if (++n < 3) return round();
+        const v = Math.round(times.reduce((a,b) => a+b) / 3);
+        finish({ key:'reaction', value:v, unit:'мс в среднем',
+          verdict: v < 200 ? 'Молниеносно. Почти киберспортсмен.' : v < 280 ? 'Быстрее большинства людей.' : v < 400 ? 'Нормальная средняя реакция.' : 'Сонный режим. Попробуй после кофе.' });
+      };
+    };
+    round();
+  },
+  taps(){
+    let n = 0, started = false;
+    stage.innerHTML = `<button class="pad tap" id="pad">Жми!<small>Отсчёт пойдёт с первого тапа</small></button>`;
+    const pad = $('#pad');
+    pad.onpointerdown = () => {
+      n++; pad.innerHTML = n + '<small>тапов</small>';
+      if (started) return; started = true;
+      setTimeout(() => { pad.onpointerdown = null; const v = +(n/10).toFixed(1);
+        finish({ key:'taps', value:v, unit:'тапов в секунду',
+          verdict: v >= 8 ? 'Пальцы-пулемёты.' : v >= 5 ? 'Уверенный темп.' : 'Разминка засчитана.' }); }, 10000);
+    };
+  },
+  iq(){
+    const Q = [
+      ['2, 6, 18, 54, …?', ['108','162','148','216'], 1],
+      ['Книга относится к «читать», как вилка к …', ['еда','резать','есть','металл'], 2],
+      ['Все розы — цветы. Некоторые цветы увядают. Значит, некоторые розы увядают?', ['Да','Нет','Нельзя сказать'], 2],
+      ['1, 1, 2, 3, 5, 8, …?', ['11','12','13','15'], 2],
+      ['5 машин делают 5 деталей за 5 минут. За сколько минут 100 машин сделают 100 деталей?', ['5','20','50','100'], 0],
+      ['Какое слово лишнее: яблоко, груша, морковь, слива?', ['яблоко','груша','морковь','слива'], 2],
+    ];
+    let i = 0, ok = 0;
+    const ask = () => {
+      const [q, opts] = Q[i];
+      stage.innerHTML = `<div class="bar"><i style="width:${i/Q.length*100}%"></i></div>
+        <div class="card"><p class="q">${q}</p>${opts.map((o,k) => `<button class="opt" data-k="${k}">${o}</button>`).join('')}</div>`;
+      stage.querySelectorAll('.opt').forEach(b => b.onclick = () => {
+        if (+b.dataset.k === Q[i][2]) ok++;
+        if (++i < Q.length) return ask();
+        const v = Math.round(80 + ok*8.5);
+        finish({ key:'iq', value:v, unit:`IQ · верно ${ok} из ${Q.length}`,
+          verdict: v >= 120 ? 'Сильный результат.' : v >= 100 ? 'Твёрдая середина, это норма.' : 'Есть куда расти. Попробуй ещё раз.' });
+      });
+    };
+    ask();
+  }
+};
+</script>
+</body>
+</html>
